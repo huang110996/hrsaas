@@ -52,7 +52,7 @@ module.exports = {
     //     }
 
     // 配置反向代理
-    Proxy: {
+    proxy: {
       // 当地址中有/api时会触发代理机制
       '/api': {
         target: 'http://ihrm-java.itheima.net/', // 要代理的服务器地址

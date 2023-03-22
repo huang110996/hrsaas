@@ -21,6 +21,7 @@ module.exports = {
         "allowFirstLine": false
       }
     }],
+    "indent": ['off', 2],
     // singleline...单行元素的配置。如果元素没有属性或最后一个属性与左括号位于同一行，则它是单行元素。"never"（默认）...不允许在右括号前换行。"always"...要求在右括号前有一个换行符。
     // multiline...多行元素的配置。如果最后一个属性不在左括号的同一行上，则它是一个多行元素。"never"...不允许在右括号前换行。"always"（默认）...要求在右括号前有一个换行符。
     'vue/html-closing-bracket-newline': ['error', {
