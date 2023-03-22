@@ -21,8 +21,23 @@ module.exports = {
         "allowFirstLine": false
       }
     }],
+    // singleline...单行元素的配置。如果元素没有属性或最后一个属性与左括号位于同一行，则它是单行元素。"never"（默认）...不允许在右括号前换行。"always"...要求在右括号前有一个换行符。
+    // multiline...多行元素的配置。如果最后一个属性不在左括号的同一行上，则它是一个多行元素。"never"...不允许在右括号前换行。"always"（默认）...要求在右括号前有一个换行符。
+    'vue/html-closing-bracket-newline': ['error', {
+      'singleline': 'never',
+      'multiline': 'always'
+    }],
+    "vue/html-self-closing": ["error", {
+      "html": {
+        "void": "always",
+        "normal": "never",
+        "component": "always"
+      },
+      "svg": "always",
+      "math": "always"
+    }],
     "vue/singleline-html-element-content-newline": "off",
-    "vue/multiline-html-element-content-newline":"off",
+    "vue/multiline-html-element-content-newline": "off",
     "vue/name-property-casing": ["error", "PascalCase"],
     "vue/no-v-html": "off",
     'accessor-pairs': 2,
@@ -47,7 +62,7 @@ module.exports = {
     'curly': [2, 'multi-line'],
     'dot-location': [2, 'property'],
     'eol-last': 2,
-    'eqeqeq': ["error", "always", {"null": "ignore"}],
+    'eqeqeq': ["error", "always", { "null": "ignore" }],
     'generator-star-spacing': [2, {
       'before': true,
       'after': true
