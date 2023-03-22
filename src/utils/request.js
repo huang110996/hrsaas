@@ -3,12 +3,18 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
-// create an axios instance
-const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
-})
+const service = axios.create({}) // 创建一个axios实例
+service.interceptors.request.use() // 请求拦截器
+service.interceptors.response.use() // 响应拦截器
+
+export default service // 向外导出service
+
+// // create an axios instance
+// const service = axios.create({
+//   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+//   // withCredentials: true, // send cookies when cross-domain requests
+//   timeout: 5000 // request timeout
+// })
 
 // request interceptor
 service.interceptors.request.use(
@@ -82,4 +88,4 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+// export default service
