@@ -10,7 +10,7 @@
     >
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" />
+          <img src="~@/assets/common/login-logo.png" />
         </h3>
       </div>
 
