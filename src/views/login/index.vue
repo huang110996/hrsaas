@@ -72,6 +72,7 @@
 <script>
 /* eslint-disable */
 import { validMobile } from "@/utils/validate";
+import {mapActions} from "vuex";
 
 export default {
   name: "Login",
@@ -113,6 +114,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['user/login']),
     showPwd() {
       if (this.passwordType === "password") {
         this.passwordType = "";
@@ -124,23 +126,44 @@ export default {
       });
     },
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.loading = true;
-          this.$store
-            .dispatch("user/login", this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
-              this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
-        } else {
-          console.log("error submit!!");
-          return false;
+      // 表单验证  使用this.$refs获取表单dom
+      this.$refs.loginForm.validate(async isOk => {
+        // 判断是否验证通过，只有验证通过了才会调用actions
+        if (isOk) {
+          try {
+            this.loading = true
+            await this['user/login'](this.loginForm)
+            // 应该登录成功后跳转页面
+            // async标记的函数实际是一个promise对象
+            // await下面的代码，都是成功执行的代码
+            this.$router.push('/')
+          } catch (error) {
+            console.log(error);
+          } finally {
+            // 不管执行try或者catch 都会执行的代码
+            this.loading = false
+          }
+         
         }
-      });
+      })
+
+      // this.$refs.loginForm.validate((valid) => {
+      //   if (valid) {
+      //     this.loading = true;
+      //     this.$store
+      //       .dispatch("user/login", this.loginForm)
+      //       .then(() => {
+      //         this.$router.push({ path: this.redirect || "/" });
+      //         this.loading = false;
+      //       })
+      //       .catch(() => {
+      //         this.loading = false;
+      //       });
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
     },
   },
 };
