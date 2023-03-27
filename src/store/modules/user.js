@@ -1,5 +1,5 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
 
 // 状态
 // 初始化的时候从缓存中读取状态 并赋值到初始化的状态上
@@ -37,12 +37,23 @@ const actions = {
     // 调用api登录接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+    // 拿到token说明登录成功，设置当前时间戳
+    setTimeStamp()
   },
   async getUserInfo(context) {
     // 调用获取用户资料接口
     const result = await getUserInfo()
-    context.commit('setUserInfo', result) // 提交到mutations
+    // 获取用户详情
+    const baseInfo = await getUserDetailById(result.userId)
+    context.commit('setUserInfo', { ...result, ...baseInfo }) // 提交到mutations
     return result // 为后期做权限使用
+  },
+  // 登出操作
+  logout(context) {
+    // 删除token
+    context.commit('removeToken')
+    // 删除用户数据
+    context.commit('removeUserInfo')
   }
 }
 

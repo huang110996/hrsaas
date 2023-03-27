@@ -1,8 +1,9 @@
 import axios from 'axios'
 import store from '@/store'
+import router from '@/router'
 import { Message } from 'element-ui'
-// import store from '@/store'
-// import { getToken } from '@/utils/auth'
+import { getTimeStamp } from '@/utils/auth'
+const TimeOut = 3600 // 定义超时时间
 
 const service = axios.create({
   // 如果执行 npm run dev  值为 /api 正确  /api 这个代理只是给开发环境配置的代理
@@ -18,6 +19,14 @@ service.interceptors.request.use(config => {
   if (store.getters.token) {
     // 注入token
     config.headers['Authorization'] = `Bearer ${store.getters.token}`
+    // 只有在有token情况下，才有必要检查时间戳是否超时
+    if (isCheckTimeOut()) {
+      // 值为true 表示超时 token过期了
+      store.dispatch('user/logout') // 登出操作
+      // 跳转到登录页
+      router.push('/login')
+      return Promise.reject(new Error('token超时了'))
+    }
   }
 
   return config // 必须要返回的
@@ -43,13 +52,24 @@ service.interceptors.response.use(
   },
   // 响应失败是执行的代码
   error => {
-    // 提示错误消息
-    Message.error(error.message)
+    // error信息 里面 response的对象
+    if (error.response && error.response.data && error.response.data.code === 10002) { // 表示token超时
+      store.dispatch('user/logout') // 超时了登出操作
+      router.push('/login') // 跳转到登出页面
+    } else {
+      // 提示错误消息
+      Message.error(error.message)
+    }
     // 返回执行错误 让当前的执行链跳出成功直接进入catch
     return Promise.reject(error)
   }
 )
-
+// 是否超时  超时逻辑  当前时间戳-缓存时间戳 是否大于 时间差
+function isCheckTimeOut() {
+  const currentTime = Date.now() // 当前时间戳
+  const timestamp = getTimeStamp()
+  return (currentTime - timestamp) / 1000 > TimeOut
+}
 export default service // 向外导出service
 
 // // create an axios instance
