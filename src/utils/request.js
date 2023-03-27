@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 import { Message } from 'element-ui'
 // import store from '@/store'
 // import { getToken } from '@/utils/auth'
@@ -11,7 +12,18 @@ const service = axios.create({
 }) // 创建一个axios实例
 
 // 请求拦截器
-service.interceptors.request.use()
+service.interceptors.request.use(config => {
+  // config 是请求的配置信息
+  // 判断是否有token数据
+  if (store.getters.token) {
+    // 注入token
+    config.headers['Authorization'] = `Bearer ${store.getters.token}`
+  }
+
+  return config // 必须要返回的
+}, error => {
+  return Promise.reject(error)
+})
 
 // 响应拦截器
 service.interceptors.response.use(
