@@ -1,13 +1,14 @@
-import Layout from '@/views/attendances'
+import Layout from '@/layout'
 export default {
   path: '/attendances',
-  name: 'attendances',
+  // name: 'attendances',
   component: Layout,
   children: [{
     path: '',
-    component: () => (import('@/views/attendances')),
+    component: () => import('@/views/attendances'),
     meta: {
-      title: '考勤'
+      title: '考勤',
+      icon: 'skill'
     }
   }]
 }
