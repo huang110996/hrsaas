@@ -19,6 +19,15 @@
       <el-table border="" v-loading='loading' :data="list">
         <el-table-column label="序号" type="index" sortable="" />
         <el-table-column label="姓名" prop="username" sortable="" />
+        <el-table-column width="120px" label="头像">
+          <template  v-slot='{ row }'>
+            <img 
+            v-imageerror="require('@/assets/common/head.jpg')"
+            :src="row.staffPhoto"
+            @click="showQcCode(row.staffPhoto)"
+            style="border-radius:50%; width:100%; height:100%; padding:10px">
+          </template>
+        </el-table-column>
         <el-table-column label="手机号码" prop="mobile" sortable="" />
         <el-table-column label="工号" prop="workNumber" sortable="" />
         <el-table-column label="聘用形式" prop="formOfEmployment" sortable="" :formatter='formatEmployment'/>
@@ -56,6 +65,11 @@
       </el-row>
     </div>
     <AddEmployee :showDialog.sync= 'showDialog' />
+    <el-dialog title="二维码" :visible.sync='showCodeDialog'>
+      <el-row type="flex" justify="center">
+        <canvas ref="myCanvas" />
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +78,7 @@ import { getEmployeesList, delEmployee} from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees' //引入员工的枚举对象
 import AddEmployee from './components/add-employee'
 import { formatDate } from '@/filters'
+import QrCode from 'qrcode'
 export default {
   data () {
     return {
@@ -74,7 +89,8 @@ export default {
       },
       list:[],
       loading: false, //显示遮罩层
-      showDialog:false
+      showDialog: false,
+      showCodeDialog: false //显示二维码弹层
     }
   },
   components:{
@@ -157,6 +173,18 @@ export default {
       })
 
       // return rows.map(item => Object.keys(headers).map(obj => item[headers[obj]]))
+    },
+    showQcCode(url) {
+      // 只有url存在，才会弹层
+      if (url) {
+        this.showCodeDialog = true // 数据更新了但弹层不会立即出现
+        // this.$nextTick()可以在上一次数据更新完毕，页面渲染之后
+        this.$nextTick(() => {
+         QrCode.toCanvas(this.$refs.myCanvas, url) // 将地址转化为二维码 但是会报错，因为弹层不会立即出现，页面渲染是异步的
+        })
+      } else {
+        this.$message.warning('该用户还未上传头像')
+      }
     }
   }
 }
