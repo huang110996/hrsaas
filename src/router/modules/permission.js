@@ -3,7 +3,7 @@ import Layout from '@/layout'
 export default {
   // 路由规则
   path: '/permission', // 路由地址
-  // name: 'permission',
+  name: 'permissions',
   component: Layout,
   children: [{
     path: '', // 二级路由的path什么都不写时，表示二级路由的默认路由 /permission 不但有布局 layout => 员工主页

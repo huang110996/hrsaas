@@ -15,6 +15,7 @@ import store from './store'
 import router from './router'
 import * as directives from '@/directives'
 import * as filters from '@/filters'
+import CheckPermission from '@/mixin/checkPermission'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -24,7 +25,10 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
+// 注册自定义组件
 Vue.use(Component)
+// 全局混入检查对象
+Vue.mixin(CheckPermission) // 表示所有组件都拥有了检查的方法
 
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key]) // 注册全局自定义指令

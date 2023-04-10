@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
+import { resetRouter } from '@/router'
 
 // 状态
 // 初始化的时候从缓存中读取状态 并赋值到初始化的状态上
@@ -54,6 +55,10 @@ const actions = {
     context.commit('removeToken')
     // 删除用户数据
     context.commit('removeUserInfo')
+    // 重置路由
+    resetRouter()
+    // 重置permission中的数据，两个带命名空间的子模块的vuex，调用方法需要在context.commit() 传第三个参数 { root : true}
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 
