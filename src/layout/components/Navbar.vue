@@ -8,6 +8,12 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <!-- 放置多语言插件 -->
+      <LangSelect class="right-menu-item"/>
+      <!-- 放置全屏插件 -->
+      <ScreenFull class="right-menu-item"/>
+      <!-- 放置主题颜色选择 -->
+      <ThemePicker class="right-menu-item"/>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imageerror=defaultImg :src=stallPhoto class="user-avatar">
@@ -126,7 +132,7 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      vertical-align: middle;
 
       &.hover-effect {
         cursor: pointer;

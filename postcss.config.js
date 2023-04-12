@@ -1,8 +1,25 @@
-// https://github.com/michael-ciniawsky/postcss-load-config
-
-module.exports = {
-  'plugins': {
-    // to edit target browsers: use "browserslist" field in package.json
-    'autoprefixer': {}
-  }
+const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+module.exprots = {
+  mode: 'development',
+  entry: path.join(__dirname, 'src/index.js'),
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /.vue$/,
+        loader: 'vue-loader',
+        exclude: file => (
+          /node_modules/.test(file) &&
+          !/\.vue\.js/.test(file)
+        )
+      }
+    ]
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ]
 }
